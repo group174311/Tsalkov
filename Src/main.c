@@ -49,6 +49,8 @@ TIM_HandleTypeDef htim3;
 /* USER CODE BEGIN PV */
 /* Private variables ---------------------------------------------------------*/
 
+uint16_t t1_val = 500, t2_val = 500;
+
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -94,6 +96,7 @@ int main(void)
 
   /* USER CODE BEGIN 2 */
 
+  GPIO_PinState last_state = HAL_GPIO_ReadPin(GPIOB, GPIO_Pin_9);
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -103,7 +106,11 @@ int main(void)
   /* USER CODE END WHILE */
 
   /* USER CODE BEGIN 3 */
-
+//	  uint8_t now = GPIO_ReadInputDataBit(TIMER_MAIN_BUTTON_PORT, TIMER_MAIN_BUTTON_PIN);
+	  GPIO_PinState now = HAL_GPIO_ReadPin(GPIOB, GPIO_Pin_9);
+	  if (now != last_state) {
+		  last_state = now;
+	  }
   }
   /* USER CODE END 3 */
 
