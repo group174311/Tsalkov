@@ -96,7 +96,7 @@ int main(void)
 
   /* USER CODE BEGIN 2 */
 
-  GPIO_PinState last_state = HAL_GPIO_ReadPin(GPIOB, GPIO_Pin_9);
+  GPIO_PinState last_state = HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_9);
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -106,10 +106,22 @@ int main(void)
   /* USER CODE END WHILE */
 
   /* USER CODE BEGIN 3 */
-//	  uint8_t now = GPIO_ReadInputDataBit(TIMER_MAIN_BUTTON_PORT, TIMER_MAIN_BUTTON_PIN);
-	  GPIO_PinState now = HAL_GPIO_ReadPin(GPIOB, GPIO_Pin_9);
+	  GPIO_PinState now = HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_9);
 	  if (now != last_state) {
 		  last_state = now;
+	  }
+
+	  if (HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_11) == GPIO_PIN_RESET) {
+		  t1_val = 1000;
+	  }
+	  else if (HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_15) == GPIO_PIN_RESET) {
+		  t1_val = 1500;
+	  }
+	  else if (HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_15) == GPIO_PIN_RESET) {
+		  t1_val = 2000;
+	  }
+	  else {
+		  t1_val = 500;
 	  }
   }
   /* USER CODE END 3 */
