@@ -108,7 +108,23 @@ int main(void)
   /* USER CODE BEGIN 3 */
 	  GPIO_PinState now = HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_9);
 	  if (now != last_state) {
+		  HAL_TIM_Base_Stop(&htim3);
+
+		  if (now) {
+			  uint16_t ticks =  __HAL_TIM_GET_COUNTER(&htim3);
+			  if (ticks >= 1000)
+				  t2_val = ticks;
+			  __HAL_TIM_SET_AUTORELOAD(&htim3, t1_val);
+		  }
+		  else {
+			  HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13, GPIO_PIN_SET);
+			  __HAL_TIM_SET_AUTORELOAD(&htim3, UINT16_MAX);
+		  }
+
 		  last_state = now;
+		  //    		TIM3->CNT = 0;
+		  __HAL_TIM_SET_COUNTER(&htim3, 0);
+		  HAL_TIM_Base_Start(&htim3);
 	  }
 
 	  if (HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_11) == GPIO_PIN_RESET) {
@@ -291,6 +307,16 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef * htim)
 {
 	if (htim == &htim3) {
 
+	//    if (GPIOC->IDR & GPIO_IDR_IDR13) {
+		if (HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_13) == GPIO_PIN_SET) {
+			__HAL_TIM_SET_AUTORELOAD(&htim3, t2_val);
+//			HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13, GPIO_PIN_RESET);
+	    }
+	    else {
+	    	__HAL_TIM_SET_AUTORELOAD(&htim3, t1_val);
+//	    	HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13, GPIO_PIN_SET);
+	    }
+		HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_13);
 	}
 }
 
