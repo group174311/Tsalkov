@@ -6,3 +6,5 @@
 Drivers/
 *.ld
 startup/
+Debug/
+*.cfg
