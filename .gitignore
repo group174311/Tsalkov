@@ -8,3 +8,4 @@ Drivers/
 startup/
 Debug/
 *.cfg
+*.scratch
